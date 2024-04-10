@@ -1,6 +1,14 @@
 ## to-do
 - [x] poetry
 - [x] ruff
+- [x] typing
+- [x] Concurrency and async / await
+- [ ] fastapi
+- [ ] inference using semantic kernel and openai api
+- [ ] integrate with streamlit
+- [ ] docker
+- [ ] deploy on GCP
+- [ ] git action
 
 ## poetry cheatsheet
 - poetry new {project name}
@@ -24,3 +32,10 @@
 
 - poetry show {package name}
     - poetry show --tree
+
+## FastAPI
+- [FastAPI vs Flask](https://www.turing.com/kb/fastapi-vs-flask-a-detailed-comparison)
+- [Concurrency and async / await](https://fastapi.tiangolo.com/async)
+- [Concurrency vs Parallelism](https://oxylabs.io/blog/concurrency-vs-parallelism)
+- [Blocking vs Non-blocking vs Sync vs Async](https://developer.ibm.com/articles/l-async)
+
