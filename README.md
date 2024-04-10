@@ -1,6 +1,6 @@
 ## to-do
 - [x] poetry
-- [ ] ruff
+- [x] ruff
 
 ## poetry cheatsheet
 - poetry new {project name}
