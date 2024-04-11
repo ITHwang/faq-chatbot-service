@@ -6,8 +6,9 @@
 - [ ] fastapi
 - [ ] inference using semantic kernel and openai api
 - [ ] integrate with streamlit
+- [ ] integrate with alignai
 - [ ] docker
-- [ ] deploy on GCP
+- [ ] deploy on AWS
 - [ ] git action
 
 ## poetry cheatsheet
