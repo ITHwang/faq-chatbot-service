@@ -1,7 +1,7 @@
 from enum import Enum
-from typing import Annotated, Any
+from typing import Annotated
 
-from fastapi import Body, FastAPI, Query, Path, Response
+from fastapi import Body, FastAPI, File, Form, Query, Path, Response, UploadFile, status
 from fastapi.responses import JSONResponse, RedirectResponse
 from pydantic import BaseModel, EmailStr, Field, HttpUrl
 
@@ -116,7 +116,7 @@ class User(BaseModel):
     full_name: str | None = None
 
 
-@app.post("/items/")
+@app.post("/items/", status_code=status.HTTP_201_CREATED)
 async def create_item(item: Item):
     item_dict = item.model_dump()
     if item.tax:
@@ -161,6 +161,23 @@ async def create_index_weights(weights: dict[int, float]):
     # Keep in mind that JSON only supports str as keys.
     # But Pydantic has automatic data conversion.
     return weights
+
+
+# it is required to send a username and password as form fields.
+@app.post("/login/")
+async def login(username: Annotated[str, Form()], password: Annotated[str, Form()]):
+    return {"username": username}
+
+
+@app.post("/files/")
+async def create_file(file: Annotated[bytes, File()]):
+    return {"file_size": len(file)}
+
+
+# It uses a "spooled" file which is a file stored in memory up to a maximum size limit, and after passing this limit it will be stored in disk.
+@app.post("/uploadfile/")
+async def create_upload_file(file: UploadFile):
+    return {"filename": file.filename}
 
 
 ##########################################

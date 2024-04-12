@@ -39,4 +39,3 @@
 - [Concurrency and async / await](https://fastapi.tiangolo.com/async)
 - [Concurrency vs Parallelism](https://oxylabs.io/blog/concurrency-vs-parallelism)
 - [Blocking vs Non-blocking vs Sync vs Async](https://developer.ibm.com/articles/l-async)
-
