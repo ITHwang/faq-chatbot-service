@@ -157,7 +157,7 @@ async def create_item(item: Item):
 
 
 @app.put("/items/{item_id}", tags=["items"])
-async def update_item(item_id: int, item: Item, q: str | None = None):
+async def update_item3(item_id: int, item: Item, q: str | None = None):
     """
     If the parameter is also declared in the path, it will be used as a path parameter.
     If the parameter is of a singular type (like int, float, str, bool, etc) it will be interpreted as a query parameter.
@@ -171,7 +171,7 @@ async def update_item(item_id: int, item: Item, q: str | None = None):
 
 # you can instruct FastAPI to treat it as another body key using Body:
 @app.put("/items2/{item_id}", tags=["items"])
-async def update_item2(item_id: int, item: Item, user: User, importance: Annotated[int, Body()]):
+async def update_item4(item_id: int, item: Item, user: User, importance: Annotated[int, Body()]):
     results = {"item_id": item_id, "item": item, "user": user, "importance": importance}
     return results
 
@@ -254,8 +254,3 @@ async def get_portal(teleport: bool = False) -> Response:
     if teleport:
         return RedirectResponse(url="https://www.youtube.com/watch?v=zxzxzx")
     return JSONResponse(content={"message": "Here's your interdimensional portal."})
-
-
-##########################################
-# Updates - Body
-##########################################

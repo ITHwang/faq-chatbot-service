@@ -4,7 +4,7 @@
 - [x] typing
 - [x] Concurrency and async / await
 - [ ] fastapi
-- [ ] inference using semantic kernel and openai api
+- [ ] inference using LlamaIndex and openai api
 - [ ] integrate with streamlit
 - [ ] integrate with alignai
 - [ ] docker
@@ -39,3 +39,6 @@
 - [Concurrency and async / await](https://fastapi.tiangolo.com/async)
 - [Concurrency vs Parallelism](https://oxylabs.io/blog/concurrency-vs-parallelism)
 - [Blocking vs Non-blocking vs Sync vs Async](https://developer.ibm.com/articles/l-async)
+
+## References
+- [SEC Insights](https://github.com/run-llama/sec-insights)
