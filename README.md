@@ -40,5 +40,10 @@
 - [Concurrency vs Parallelism](https://oxylabs.io/blog/concurrency-vs-parallelism)
 - [Blocking vs Non-blocking vs Sync vs Async](https://developer.ibm.com/articles/l-async)
 
-## References
+## AWS
+- [Concurrency Compared: AWS Lambda, AWS App Runner, and AWS Fargate](https://nathanpeck.com/concurrency-compared-lambda-fargate-app-runner)
+- [Tutorial: Building a serverless chat app with a WebSocket API, Lambda and DynamoDB](https://docs.aws.amazon.com/apigateway/latest/developerguide/websocket-api-chat-app.html)
+- [How to Stand Up FastAPI on Lambda with Docker](https://jacobsolawetz.medium.com/how-to-stand-up-fastapi-on-lambda-with-docker-299609323e40)
+
+## Other References
 - [SEC Insights](https://github.com/run-llama/sec-insights)

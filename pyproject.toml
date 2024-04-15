@@ -4,12 +4,13 @@ version = "0.1.0"
 description = ""
 authors = ["ITHwang <hwangintech@gmail.com>"]
 readme = "README.md"
-package-mode = false
+packages = [{include = "app"}]
 
 [tool.poetry.dependencies] # main dependency group
 python = "^3.11"
 ruff = "^0.3.5"
 fastapi = {extras = ["all"], version = "^0.110.1"}
+pydantic-settings = "^2.2.1"
 
 [build-system]
 requires = ["poetry-core"]
@@ -17,3 +18,6 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.ruff]
 line-length = 120
+
+[tool.poetry.scripts]
+start = "app.main:start"
