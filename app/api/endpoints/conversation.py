@@ -10,6 +10,6 @@ router = APIRouter()
 
 @router.get("/")
 async def root():
-    response = OpenAI().complete("Paul Graham is ")
-    # response = "df"
+    # response = OpenAI().complete("Paul Graham is ")
+    response = "df"
     return {"response": response}

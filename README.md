@@ -46,15 +46,27 @@
 - [How to Stand Up FastAPI on Lambda with Docker](https://jacobsolawetz.medium.com/how-to-stand-up-fastapi-on-lambda-with-docker-299609323e40)
 
 ## LlamaIndex
-- Tools
-    1. Data Connectors
-    2. Data Indexes
-    3. Engines
-        - Query Engines
-        - Chat Engines
-    4. Data Agents
-    5. Application integrations
-    
+- Steps for building an LLM application
+    1. Using LLMs
+        - `from llama_index.llms import OpenAI`
+        - `from llama_index.agent import OpenAIAgent`
+        - By default LlamaIndex uses `gpt-3.5-turbo`
+    2. Loading data from external sources
+        - `from llama_index.core import SimpleDirectoryReader`
+        - `from llama_index.core.node_parser import SentenceSplitter`
+    3. Indexing and Embedding
+        - By default LlamaIndex uses `text-embedding-ada-002`
+        - `from llama_index.core import VectorStoreIndex`
+    4. Storing
+        - `from llama_index.core import StorageContext, load_index_from_storage`
+    5. Querying
+        - `from llama_index.core import get_response_synthesizer`
+        - `from llama_index.core.retrievers import VectorIndexRetriever`
+        - `from llama_index.core.query_engine import RetrieverQueryEngine`
+        - `from llama_index.core.postprocessor import SimilarityPostprocessor`
+        - [Build your own OpenAI Agent](https://docs.llamaindex.ai/en/stable/examples/agent/openai_agent)
+        - [Chat Engine - OpenAI Agent Mode](https://docs.llamaindex.ai/en/stable/examples/chat_engine/chat_engine_openai)
+        - [OpenAI Agent with Query Engine Tools](https://docs.llamaindex.ai/en/stable/examples/agent/openai_agent_with_query_engine)
 
 ## Other References
 - [SEC Insights](https://github.com/run-llama/sec-insights)
