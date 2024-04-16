@@ -1,5 +1,6 @@
 from enum import Enum
 import os
+from pathlib import Path
 
 from pydantic_settings import BaseSettings
 
@@ -15,9 +16,9 @@ class AppEnvironment(str, Enum):
 class Settings(BaseSettings):
     """Application settings."""
 
-    OPENAPI_URL: str | None = None
-    AWS_KEY: str | None = None
-    AWS_SECRET: str | None = None
+    OPENAI_API_KEY: str
+    # AWS_KEY: str | None = None
+    # AWS_SECRET: str | None = None
     API_PREFIX: str = "/api"
     LOG_LEVEL: str = "DEBUG"
     RENDER: bool = False
@@ -46,5 +47,10 @@ class Settings(BaseSettings):
         # so we instead go by the number of server instances that can be run given the memory
         return 3
 
+    class Config:
+        work_dir = Path(__file__).parent.parent.parent
+        env_file = str(work_dir / ".env.development")
+
 
 settings = Settings()
+os.environ["OPENAI_API_KEY"] = settings.OPENAI_API_KEY
