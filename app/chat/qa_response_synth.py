@@ -38,7 +38,7 @@ def get_custom_response_synth(service_context: ServiceContext) -> BaseSynthesize
     )
 
     return get_response_synthesizer(
-        service_context,
+        service_context=service_context,
         refine_template=refine_prompt,
         text_qa_template=qa_prompt,
         # only useful for gpt-3.5

@@ -3,8 +3,10 @@
 - [x] ruff
 - [x] typing
 - [x] Concurrency and async / await
-- [ ] fastapi
-- [ ] inference using LlamaIndex and openai api
+- [x] fastapi
+- [x] inference using LlamaIndex and openai api
+- [ ] fix: can't retrieve relevant documents
+- [ ] memorize dialog history
 - [ ] integrate with streamlit
 - [ ] integrate with alignai
 - [ ] docker

@@ -2,7 +2,7 @@ import os
 
 import chromadb
 from llama_index.core import VectorStoreIndex, ServiceContext
-from llama_index.core.tools import QueryEngineTool
+from llama_index.core.tools import QueryEngineTool, ToolMetadata
 from llama_index.embeddings.openai import (
     OpenAIEmbedding,
     OpenAIEmbeddingMode,
@@ -19,9 +19,15 @@ from app.chat.system_message import SYSTEM_MESSAGE
 from app.chat.qa_response_synth import get_custom_response_synth
 
 
-def get_chat_engine(db_path: str) -> OpenAIAgent:
-    index = _load_index_from_db(db_path)
-    query_engine_tool = QueryEngineTool(query_engine=_index_to_query_engine(index))
+def get_chat_engine() -> OpenAIAgent:
+    index = _load_index_from_db(settings.DB_PATH)
+    query_engine_tool = QueryEngineTool(
+        query_engine=_index_to_query_engine(index),
+        metadata=ToolMetadata(
+            name="naver_smart_store_faq",
+            description="A tool for querying the Naver Smart Store FAQ.",
+        ),
+    )
 
     llm = OpenAI(
         temperature=0,
@@ -124,7 +130,7 @@ def _get_tool_service_context() -> ServiceContext:
     )
 
     # Use a smaller chunk size to retrieve more granular results
-    node_parser = SentenceSplitter.from_defaults(
+    node_parser = SentenceSplitter(
         chunk_size=settings.CHUNK_SIZE,
         chunk_overlap=settings.CHUNK_OVERLAP,
     )
