@@ -38,9 +38,13 @@ def time_logger(func):
 
 
 def extract_transform_load(pkl_path: str, db_path: str, collection_name: str) -> None:
+    if os.path.exists(db_path) and os.listdir(db_path):
+        logging.debug(f"Already existing database from {db_path}")
+        logging.debug("Skip saving the database")
+        return
     raw_data = _load_raw_data(pkl_path)
     documents = _preprocess_raw_data(raw_data)
-    save_db(db_path, collection_name, documents)
+    _save_db(db_path, collection_name, documents)
 
 
 def _get_outlier_bound(nums):
@@ -160,11 +164,7 @@ def _get_tool_service_context() -> ServiceContext:
 
 
 @time_logger
-def save_db(db_path: str, collection_name: str, documents: list[Document]) -> None:
-    if os.path.exists(db_path) and os.listdir(db_path):
-        logging.debug(f"Already existing database from {db_path}")
-        logging.debug("Skip saving the database")
-        return
+def _save_db(db_path: str, collection_name: str, documents: list[Document]) -> None:
     if not os.path.exists(db_path):
         os.makedirs(db_path)
 
