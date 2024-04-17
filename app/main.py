@@ -6,6 +6,7 @@ import uvicorn
 
 from app.api import api_router
 from app.core import settings
+from app.data.etl import extract_transform_load
 
 logger = logging.getLogger(__name__)
 
@@ -22,6 +23,10 @@ def __setup_logging(log_level: str):
     logger.info(f"Set up logging with log level {log_level}")
 
 
+def __setup_db(pkl_path: str, db_path: str, collection_name: str):
+    extract_transform_load(pkl_path, db_path, collection_name)
+
+
 app = FastAPI()
 
 app.include_router(api_router, prefix=settings.API_PREFIX)
@@ -33,6 +38,8 @@ def start():
     print("Running in AppEnvironment: " + settings.ENVIRONMENT.value)
 
     __setup_logging(settings.LOG_LEVEL)
+    __setup_db(settings.PKL_PATH, settings.DB_PATH, settings.COLLECTION_NAME)
+
     live_reload = not settings.RENDER
 
     uvicorn.run(

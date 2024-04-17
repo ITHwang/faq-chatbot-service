@@ -24,6 +24,20 @@ class Settings(BaseSettings):
     RENDER: bool = False
     IS_PULL_REQUEST: bool = False
 
+    # See https://docs.llamaindex.ai/en/stable/module_guides/loading/documents_and_nodes/usage_documents
+    METADATA_SEPERATOR: str = "\n"
+    METADATA_TEMPLATE: str = "{key}: {value}"
+    TEXT_TEMPLATE: str = "{metadata_str}\n\n{content}"
+
+    # See https://docs.llamaindex.ai/en/stable/api_reference/node_parsers/sentence_splitter
+    CHUNK_SIZE: int = 512
+    CHUNK_OVERLAP: int = 128
+
+    BASE_PATH: Path = Path(__file__).parent.parent
+    PKL_PATH: str = str(BASE_PATH / "data" / "raw" / "final_result.pkl")
+    DB_PATH: str = str(BASE_PATH / "data" / "db")
+    COLLECTION_NAME: str = "qna"
+
     @property
     def ENVIRONMENT(self) -> AppEnvironment:
         """
