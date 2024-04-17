@@ -38,6 +38,8 @@ class Settings(BaseSettings):
     DB_PATH: str = str(BASE_PATH / "data" / "db")
     COLLECTION_NAME: str = "qna"
 
+    TOP_K: int = 5
+
     @property
     def ENVIRONMENT(self) -> AppEnvironment:
         """
@@ -60,6 +62,13 @@ class Settings(BaseSettings):
         # But the Render.com servers don't have enough memory to support that many workers,
         # so we instead go by the number of server instances that can be run given the memory
         return 3
+
+    @property
+    def VERBOSE(self) -> bool:
+        """
+        Used for setting verbose flag in LlamaIndex modules.
+        """
+        return self.LOG_LEVEL == "DEBUG" or self.IS_PULL_REQUEST or not self.RENDER
 
     class Config:
         work_dir = Path(__file__).parent.parent.parent

@@ -42,6 +42,7 @@ def extract_transform_load(pkl_path: str, db_path: str, collection_name: str) ->
         logging.debug(f"Already existing database from {db_path}")
         logging.debug("Skip saving the database")
         return
+
     raw_data = _load_raw_data(pkl_path)
     documents = _preprocess_raw_data(raw_data)
     _save_db(db_path, collection_name, documents)
