@@ -1,3 +1,4 @@
+import logging
 import os
 
 import chromadb
@@ -18,9 +19,12 @@ from app.core.config import settings
 from app.chat.system_message import SYSTEM_MESSAGE
 from app.chat.qa_response_synth import get_custom_response_synth
 
+logger = logging.getLogger(__name__)
+
 
 def get_chat_engine() -> OpenAIAgent:
     index = _load_index_from_db(settings.DB_PATH)
+
     query_engine_tool = QueryEngineTool(
         query_engine=_index_to_query_engine(index),
         metadata=ToolMetadata(
@@ -36,10 +40,10 @@ def get_chat_engine() -> OpenAIAgent:
         api_key=settings.OPENAI_API_KEY,
     )
 
+    # note: OpenAIAgent uses ChatMemoryBuffer
     chat_engine = OpenAIAgent.from_tools(
         tools=[query_engine_tool],
         llm=llm,
-        chat_history=[],
         verbose=settings.VERBOSE,
         system_prompt=SYSTEM_MESSAGE,
     )
@@ -64,7 +68,8 @@ def _load_index_from_db(db_path: str) -> VectorStoreIndex:
         raise ValueError(f"Database not found at {db_path}")
 
     db = chromadb.PersistentClient(path=db_path)
-    chroma_collection = db.get_or_create_collection("quickstart")
+    chroma_collection = db.get_collection(settings.COLLECTION_NAME)
+
     vector_store = ChromaVectorStore(chroma_collection=chroma_collection)
 
     embed_model = OpenAIEmbedding(
@@ -88,13 +93,6 @@ def _index_to_query_engine(index: VectorStoreIndex) -> RetrieverQueryEngine:
     Returns:
         RetrieverQueryEngine: The converted RetrieverQueryEngine object.
     """
-    llm = OpenAI(
-        temperature=0,
-        model="gpt-3.5-turbo",
-        streaming=False,
-        api_key=settings.OPENAI_API_KEY,
-    )
-
     retriever = index.as_retriever(similarity_top_k=settings.TOP_K)
 
     tool_service_context = _get_tool_service_context()
@@ -103,9 +101,9 @@ def _index_to_query_engine(index: VectorStoreIndex) -> RetrieverQueryEngine:
 
     return RetrieverQueryEngine.from_args(
         retriever,
-        llm=llm,
         response_synthesizer=response_synthesizer,
-        service_context=tool_service_context,
+        service_context=_get_tool_service_context(),
+        verbose=settings.VERBOSE,
     )
 
 
@@ -119,7 +117,7 @@ def _get_tool_service_context() -> ServiceContext:
     llm = OpenAI(
         temperature=0,
         model="gpt-3.5-turbo",
-        streaming=False,
+        streaming=True,
         api_key=settings.OPENAI_API_KEY,
     )
 
@@ -134,6 +132,7 @@ def _get_tool_service_context() -> ServiceContext:
         chunk_size=settings.CHUNK_SIZE,
         chunk_overlap=settings.CHUNK_OVERLAP,
     )
+
     service_context = ServiceContext.from_defaults(
         llm=llm,
         embed_model=embedding_model,

@@ -5,13 +5,16 @@
 - [x] Concurrency and async / await
 - [x] fastapi
 - [x] inference using LlamaIndex and openai api
-- [ ] fix: can't retrieve relevant documents
-- [ ] memorize dialog history
 - [ ] integrate with streamlit
 - [ ] integrate with alignai
 - [ ] docker
 - [ ] deploy on AWS
 - [ ] git action
+
+## to-fix
+- logging properly
+- convert chat engine to singleton
+- check if a chatbot memorizes dialog history
 
 ## poetry cheatsheet
 - poetry new {project name}

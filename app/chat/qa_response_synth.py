@@ -1,3 +1,5 @@
+import logging
+
 from llama_index.core import ServiceContext
 from llama_index.core.prompts import PromptType, PromptTemplate
 from llama_index.core.response_synthesizers import get_response_synthesizer
@@ -5,7 +7,7 @@ from llama_index.core.response_synthesizers.base import BaseSynthesizer
 
 
 def get_custom_response_synth(service_context: ServiceContext) -> BaseSynthesizer:
-    refine_template_str = """
+    refine_template_str = f"""
 사용자가 스마트 스토어 FAQ에 질문을 남겼어.
 원래 질문은 다음과 같아: {{query_str}}
 기존 답변은 다음과 같아: {{existing_answer}}
@@ -17,12 +19,13 @@ def get_custom_response_synth(service_context: ServiceContext) -> BaseSynthesize
 맥락이 유용하지 않다면 원래 답변을 반환해줘.
 개선된 답변:
 """.strip()
+
     refine_prompt = PromptTemplate(
         template=refine_template_str,
         prompt_type=PromptType.REFINE,
     )
 
-    qa_template_str = """
+    qa_template_str = f"""
 사용자가 스마트 스토어 FAQ에 질문을 남겼어.
 아래는 맥락 정보입니다.
 ---------------------
@@ -32,9 +35,10 @@ def get_custom_response_synth(service_context: ServiceContext) -> BaseSynthesize
 질문: {{query_str}}
 답변:
 """.strip()
+
     qa_prompt = PromptTemplate(
         template=qa_template_str,
-        prompt_type=PromptType.QUESTION_ANSWER,
+        # prompt_type=PromptType.QUESTION_ANSWER,
     )
 
     return get_response_synthesizer(
@@ -43,4 +47,5 @@ def get_custom_response_synth(service_context: ServiceContext) -> BaseSynthesize
         text_qa_template=qa_prompt,
         # only useful for gpt-3.5
         structured_answer_filtering=False,
+        verbose=True,
     )

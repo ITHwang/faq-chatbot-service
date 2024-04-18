@@ -14,7 +14,11 @@ from llama_index.core import Document, VectorStoreIndex, ServiceContext, Storage
 from llama_index.core.node_parser import SentenceSplitter
 from llama_index.vector_stores.chroma import ChromaVectorStore
 from llama_index.llms.openai import OpenAI
-from llama_index.embeddings.openai import OpenAIEmbedding, OpenAIEmbeddingMode, OpenAIEmbeddingModelType
+from llama_index.embeddings.openai import (
+    OpenAIEmbedding,
+    OpenAIEmbeddingMode,
+    OpenAIEmbeddingModelType,
+)
 
 
 from app.core.config import settings
@@ -45,6 +49,7 @@ def extract_transform_load(pkl_path: str, db_path: str, collection_name: str) ->
 
     raw_data = _load_raw_data(pkl_path)
     documents = _preprocess_raw_data(raw_data)
+
     _save_db(db_path, collection_name, documents)
 
 
@@ -92,23 +97,24 @@ def _preprocess_raw_data(raw_data: dict[str, str]) -> list[Document]:
 
         document = Document(
             text=f"질문: {question}\n대답: {answer}",
-            metadata={
-                "question": question,
-                "answer": answer,
-                "categories": categories,
-            },
-            excluded_llm_metadata_keys=["question", "answer"],
+            metadata={"categories": categories},
+            excluded_llm_metadata_keys=[],
             metadata_seperator=settings.METADATA_SEPERATOR,
             metadata_template=settings.METADATA_TEMPLATE,
             text_template=settings.TEXT_TEMPLATE,
         )
-
-    documents.append(document)
+        documents.append(document)
 
     # remove outliers
-    lower_bound, upper_bound = _get_outlier_bound([len(document.get_content()) for document in documents])
-    lower_outliers = [document for document in documents if len(document.get_content()) < lower_bound]
-    upper_outliers = [document for document in documents if len(document.get_content()) > upper_bound]
+    lower_bound, upper_bound = _get_outlier_bound(
+        [len(document.get_content()) for document in documents]
+    )
+    lower_outliers = [
+        document for document in documents if len(document.get_content()) < lower_bound
+    ]
+    upper_outliers = [
+        document for document in documents if len(document.get_content()) > upper_bound
+    ]
     logging.debug(f"The number of too short docs: {len(lower_outliers)}")
     logging.debug(f"The number of too long docs: {len(upper_outliers)}")
     documents = [
@@ -121,7 +127,9 @@ def _preprocess_raw_data(raw_data: dict[str, str]) -> list[Document]:
     logging.debug(f"The number of docs remaining: {len(documents)}")
     logging.debug(f"Mimimum length: {min(len(document.get_content()) for document in documents)}")
     logging.debug(f"Maximum length: {max(len(document.get_content()) for document in documents)}")
-    logging.debug(f"Mean length: {int(sum(len(document.get_content()) for document in documents) / len(documents))}")
+    logging.debug(
+        f"Mean length: {int(sum(len(document.get_content()) for document in documents) / len(documents))}"
+    )
 
     return documents
 
@@ -175,5 +183,8 @@ def _save_db(db_path: str, collection_name: str, documents: list[Document]) -> N
     storage_context = StorageContext.from_defaults(vector_store=vector_store)
 
     index = VectorStoreIndex.from_documents(
-        documents, storage_context=storage_context, service_context=_get_tool_service_context(), show_progress=True
+        documents,
+        storage_context=storage_context,
+        service_context=_get_tool_service_context(),
+        show_progress=True,
     )
